@@ -1,5 +1,15 @@
 terraform {
   required_version = ">= 1.3"
+
+   cloud {
+    
+    organization = "mengdanzhao-org"
+
+    workspaces {
+      name = "terraform-ansible-demo-provider"
+    }
+  }
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
