@@ -9,7 +9,7 @@ terraform {
       name = "terraform-ansible-demo-provider"
     }
   }
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -24,6 +24,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+  profile = "company"
 }
 
 provider "ansible" {}
