@@ -1,6 +1,6 @@
 ---
 - name: Install and start Nginx
-  hosts: web
+  hosts: all
   become: true
   gather_facts: true
 
@@ -28,7 +28,7 @@
           <html>
             <head><title>Terraform + Ansible Demo</title></head>
             <body style="font-family: sans-serif; text-align: center; margin-top: 100px;">
-              <h1>🎉 Nginx installed via Ansible on Terraform-provisioned EC2</h1>
+              <h1>Nginx installed via Ansible on Terraform-provisioned EC2</h1>
               <p>Server: {{ ansible_hostname }}</p>
             </body>
           </html>

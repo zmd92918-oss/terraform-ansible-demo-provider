@@ -42,7 +42,7 @@ locals {
 
 # SG作成、port 22/80開放
 resource "aws_security_group" "demo" {
-  name        = "terraform-ansible-demo-sg"
+  name        = "terraform-ansible-sg"
   description = "Allow SSH and HTTP"
 
   ingress {
@@ -50,7 +50,7 @@ resource "aws_security_group" "demo" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # demo 用，正式环境请收紧到你的 IP
+    cidr_blocks = ["0.0.0.0/0"] 
   }
 
   ingress {
@@ -69,14 +69,14 @@ resource "aws_security_group" "demo" {
   }
 
   tags = {
-    Name = "terraform-ansible-demo-sg"
+    Name = "terraform-ansible-sg"
   }
 }
 
 
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"]  # Canonical 官方账号
+  owners      = ["099720109477"] 
 
   filter {
     name   = "name"
@@ -138,10 +138,16 @@ resource "ansible_host" "web" {
 resource "ansible_playbook" "web" {
   playbook   = "${path.module}/ansible/playbook.yml"
   name       = ansible_host.web.name
-  replayable = true # 毎回applyでplaybookを実行するために replayable を true に設定
+  replayable = true
 
   ignore_playbook_failure = false
   verbosity               = 0
+
+  extra_vars = {
+    ansible_user                 = var.ssh_user
+    ansible_ssh_private_key_file = var.ssh_private_key_path
+    ansible_ssh_common_args      = "-o StrictHostKeyChecking=no"
+  }
 
   depends_on = [ansible_host.web]
 }
