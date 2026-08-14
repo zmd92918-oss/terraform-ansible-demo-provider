@@ -1,0 +1,43 @@
+---
+- name: Install and start Nginx
+  hosts: web
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Deploy a simple demo index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+            <head><title>Terraform + Ansible Demo</title></head>
+            <body style="font-family: sans-serif; text-align: center; margin-top: 100px;">
+              <h1>🎉 Nginx installed via Ansible on Terraform-provisioned EC2</h1>
+              <p>Server: {{ ansible_hostname }}</p>
+            </body>
+          </html>
+
+    - name: Ensure nginx is running
+      command: systemctl is-active nginx
+      register: nginx_status
+      changed_when: false
+
+    - name: Show nginx status
+      debug:
+        msg: "Nginx status: {{ nginx_status.stdout }}"

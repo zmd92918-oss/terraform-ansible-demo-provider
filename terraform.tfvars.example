@@ -1,0 +1,15 @@
+# 复制这个文件为 terraform.tfvars 并按需修改
+
+aws_region      = "ap-northeast-1"
+instance_type   = "t2.micro"
+
+# 方式一（推荐，默认）：让 Terraform 自动用你的本地公钥创建 Key Pair
+create_key_pair = true
+public_key_path = "~/.ssh/id_rsa.pub"
+
+# 方式二：如果你已经在 AWS 上有 Key Pair，把上面两行改成：
+# create_key_pair = false
+# key_name        = "你的已存在key pair名称"
+
+ssh_private_key_path = "~/.ssh/id_rsa"
+ssh_user              = "ubuntu"
